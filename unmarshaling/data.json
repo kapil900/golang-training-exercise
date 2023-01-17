@@ -1,0 +1,26 @@
+[
+  {
+    "Name": "a",
+    "Age": 10,
+    "Rollno": 1,
+    "Phone": ["15000"]
+   },
+   {
+    "Name": "b",
+    "Age": 11,
+    "Rollno": 2,
+    "Phone": ["00928392"]
+   },
+   {
+    "Name": "c",
+    "Age": 3,
+    "Rollno": 3,
+    "Phone": ["15"]
+   },
+   {
+    "Name": "d",
+    "Age": 4,
+    "Rollno": 4,
+    "Phone": ["898938"]
+   }
+]
