@@ -1,4 +1,5 @@
-package stringUtil
+//This above segment is for unit tests the code below line73 is for table driven tests.
+/*package stringUtil
 
 import "testing"
 
@@ -67,4 +68,37 @@ func TestCommonString6(t *testing.T) {
 	if actualString != expectedString {
 		t.Errorf("Expected String %s is not same as"+"actual string %s .", expectedString, actualString)
 	}
+}
+*/
+package stringUtil
+
+import (
+	"reflect"
+	"testing"
+)
+
+func TestFibonacc(t *testing.T) {
+	//call := CommonString(input1,input2)
+
+	errorTestCases := []struct {
+		name     string
+		input1   string
+		input2   string
+		expected string
+	}{
+		{name: "for zero", input1: "ahello", input2: "hello", expected: "hello"},
+		{name: "for one", input1: "done", input2: "done", expected: "done"},
+		{name: "for -one", input1: " ", input2: "a", expected: "l"},
+		{name: "for 9", input1: "ah", input2: "ashcab", expected: "ah"},
+	}
+	for _, value := range errorTestCases {
+
+		actualAnswer := CommonString(value.input1, value.input2)
+
+		expectedAnswer := value.expected
+		if !reflect.DeepEqual(actualAnswer, expectedAnswer) {
+			t.Errorf("got %v, wanted %v", &actualAnswer, expectedAnswer)
+		}
+	}
+
 }
