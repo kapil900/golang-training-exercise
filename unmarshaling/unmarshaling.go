@@ -1,4 +1,4 @@
-package main
+/*package main
 
 import (
 	"encoding/json"
@@ -46,5 +46,75 @@ func main() {
 	_ = ioutil.WriteFile("primary.json", primary, 0644)
 	secondary, _ := json.Marshal(s)
 	_ = ioutil.WriteFile("secondary.json", secondary, 0644)
+
+}
+*/
+
+//Refactoring based on dependency injection
+
+package main
+
+import (
+	"encoding/json"
+	"io"
+	"io/ioutil"
+	"os"
+)
+
+type student struct {
+	Name   string
+	Rollno int
+	Age    int
+	Phone  []string
+}
+
+func Checknil(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+func OpenFile(a string) *os.File {
+	Opening, err := os.Open(a)
+	Checknil(err)
+	return Opening
+}
+func readStudent(r io.Reader) []student {
+	student := []student{}
+	byteValue, _ := ioutil.ReadAll(r) //the io.Read
+	err := json.Unmarshal(byteValue, &student)
+	Checknil(err)
+	return student
+}
+
+func WriteFile(student []student, file *os.File) {
+	length, err := json.Marshal(student)
+	Checknil(err)
+	file.WriteString(string(length))
+	defer file.Close()
+}
+
+func CreateFile(nameoffile string) (filename *os.File) {
+	filename, err := os.Create(nameoffile)
+	Checknil(err)
+	return
+}
+func FilterByAge(student []student) (primary []student, secondary []student) {
+	for i := 0; i < len(student); i++ {
+		if student[i].Age < 10 {
+			primary = append(primary, student[i])
+		} else {
+			secondary = append(secondary, student[i])
+		}
+	}
+	return
+}
+func main() {
+	a := OpenFile("data.json")
+	b := readStudent(a)
+	c, d := FilterByAge(b)
+	e := CreateFile("primary.json")
+	f := CreateFile("secondary.json")
+	WriteFile(c, e)
+	WriteFile(d, f)
 
 }
