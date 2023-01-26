@@ -36,7 +36,7 @@ func databaseReader(myDb *sql.DB) ([]student, error) {
 	return studnet, nil
 }
 
-func personhandler() []student {
+func studentdb() []student {
 	db, err := sql.Open("mysql", "root:123@Passwo@tcp(localhost:3306)/student")
 	//fmt.Println("errr")
 	if err != nil {
@@ -48,13 +48,13 @@ func personhandler() []student {
 	return list
 
 }
-func RootHandler(w http.ResponseWriter, req *http.Request) {
+func Handler(w http.ResponseWriter, req *http.Request) {
 
 	if req.URL.Path == ("/") {
 
 		fmt.Fprintln(w, "write /student")
 	} else if req.URL.Path == "/student" {
-		p := personhandler()
+		p := studentdb()
 		fmt.Fprintln(w, p)
 	} else {
 		fmt.Fprintln(w, req.URL.Path[1:])
@@ -63,7 +63,7 @@ func RootHandler(w http.ResponseWriter, req *http.Request) {
 }
 func main() {
 
-	err := http.ListenAndServe(":8000", http.HandlerFunc(RootHandler))
+	err := http.ListenAndServe(":8000", http.HandlerFunc(Handler))
 	if err != nil {
 		fmt.Println(err)
 	}
