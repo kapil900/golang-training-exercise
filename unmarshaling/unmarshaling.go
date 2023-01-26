@@ -52,10 +52,11 @@ func main() {
 
 //Refactoring based on dependency injection
 
-package main
+package refactor
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -70,7 +71,7 @@ type student struct {
 
 func Checknil(err error) {
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 }
 func OpenFile(a string) *os.File {
@@ -78,12 +79,17 @@ func OpenFile(a string) *os.File {
 	Checknil(err)
 	return Opening
 }
-func readStudent(r io.Reader) []student {
-	student := []student{}
-	byteValue, _ := ioutil.ReadAll(r) //the io.Read
+func readStudent(r io.Reader) ([]student, error) {
+	var student []student
+	byteValue, err1 := ioutil.ReadAll(r) //the io.Read
+	if err1 != nil {
+		return nil, err1
+	}
 	err := json.Unmarshal(byteValue, &student)
-	Checknil(err)
-	return student
+	if err != nil {
+		return nil, err
+	}
+	return student, nil
 }
 
 func WriteFile(student []student, file *os.File) {
@@ -108,7 +114,8 @@ func FilterByAge(student []student) (primary []student, secondary []student) {
 	}
 	return
 }
-func main() {
+
+/*func main() {
 	a := OpenFile("data.json")
 	b := readStudent(a)
 	c, d := FilterByAge(b)
@@ -117,4 +124,4 @@ func main() {
 	WriteFile(c, e)
 	WriteFile(d, f)
 
-}
+}*/

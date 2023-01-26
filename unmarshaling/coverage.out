@@ -1,0 +1,12 @@
+mode: set
+golang-training-exercises/unmarshaling/unmarshaling.go:72.26,73.16 1 1
+golang-training-exercises/unmarshaling/unmarshaling.go:73.16,75.3 1 0
+golang-training-exercises/unmarshaling/unmarshaling.go:77.34,81.2 3 1
+golang-training-exercises/unmarshaling/unmarshaling.go:82.51,87.2 4 1
+golang-training-exercises/unmarshaling/unmarshaling.go:89.50,94.2 4 1
+golang-training-exercises/unmarshaling/unmarshaling.go:96.56,100.2 3 1
+golang-training-exercises/unmarshaling/unmarshaling.go:101.78,102.36 1 0
+golang-training-exercises/unmarshaling/unmarshaling.go:109.2,109.8 1 0
+golang-training-exercises/unmarshaling/unmarshaling.go:102.36,103.26 1 0
+golang-training-exercises/unmarshaling/unmarshaling.go:103.26,105.4 1 0
+golang-training-exercises/unmarshaling/unmarshaling.go:105.9,107.4 1 0
