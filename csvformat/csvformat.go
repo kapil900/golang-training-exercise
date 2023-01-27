@@ -5,8 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
-
-	_ "github.com/go-sql-driver/mysql"
+	//_ "github.com/go-sql-driver/mysql"
 )
 
 type student struct {

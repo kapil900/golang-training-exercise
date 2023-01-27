@@ -6,18 +6,31 @@ import (
 )
 
 func Handler() func(w http.ResponseWriter, req *http.Request) {
-	a := make([]string, 0)
+	//a := make([]string, 0)
+	a := map[string]string{}
 
 	return func(w http.ResponseWriter, req *http.Request) {
 		urlpath := req.URL.Path[1:]
-		for i := range a {
-			if a[i] == urlpath {
-				b := "Welcome back" + urlpath
-				fmt.Fprintln(w, b)
+		for b, _ := range a {
+			if a[b] == urlpath {
+				d := "Welcome back" + urlpath
+				fmt.Fprintln(w, d)
 				return
 			}
 		}
-		a = append(a, urlpath)
+		// for i := range a {
+		// 	if a[i] == urlpath {
+		// 		b := "Welcome back" + urlpath
+		// 		fmt.Fprintln(w, b)
+		// 		return
+		// 	}
+		// }
+		//  c:= map[l]{
+		// 	"a":1,
+
+		//  }
+		//  _,exist:=[c]
+		// a = append(b, urlpath)
 		b := "Greetings " + urlpath
 		fmt.Fprintln(w, b)
 
