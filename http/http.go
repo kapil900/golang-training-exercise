@@ -15,7 +15,7 @@ type student struct {
 	Adress string
 }
 
-func databaseReader(myDb *sql.DB) ([]student, error) {
+func DatabaseReader(myDb *sql.DB) ([]student, error) {
 
 	rows, err := myDb.Query("SELECT * FROM student")
 	if err != nil {
@@ -26,8 +26,8 @@ func databaseReader(myDb *sql.DB) ([]student, error) {
 		var s student
 		err = rows.Scan(&s.Id, &s.Age, &s.Name, &s.Adress)
 		if err != nil {
-			fmt.Println(err)
-			return nil, err
+			//fmt.Println(err)
+			//return nil, err
 			//fmt.Println(s)
 		}
 		studnet = append(studnet, s)
@@ -40,25 +40,27 @@ func studentdb() []student {
 	db, err := sql.Open("mysql", "root:123@Passwo@tcp(localhost:3306)/student")
 	//fmt.Println("errr")
 	if err != nil {
-		fmt.Println(err)
+		//fmt.Println(err)
 	}
 	defer db.Close()
 
-	list, err := databaseReader(db)
+	list, err := DatabaseReader(db)
 	return list
 
 }
 func Handler(w http.ResponseWriter, req *http.Request) {
 
 	if req.URL.Path == ("/") {
-
-		fmt.Fprintln(w, "write /student")
+		w.WriteHeader(http.StatusOK)
+		sql := studentdb()
+		fmt.Fprintln(w, sql)
 	} else if req.URL.Path == "/student" {
 		p := studentdb()
 		fmt.Fprintln(w, p)
-	} else {
-		fmt.Fprintln(w, req.URL.Path[1:])
-	}
+		//w.WriteHeader(http.StatusOK)
+	} // else {
+	//	fmt.Fprintln(w, req.URL.Path[1:])
+	//}
 
 }
 func main() {
