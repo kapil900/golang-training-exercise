@@ -2,9 +2,11 @@ package main
 
 import (
 	"database/sql"
-	"encoding/json"
 	"fmt"
+	"io"
 	"os"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type student struct {
@@ -13,81 +15,49 @@ type student struct {
 	Rollno int
 }
 
-type config struct {
-	user     string
-	password string
-	host     string
-	port     string
-	database string
-}
-type connector struct {
-	sql.DB
-}
-
-var data = config{
-	user:     "root",
-	password: "123@Passwo",
-	host:     "localhost",
-	port:     "3306",
-	database: "student",
-}
-
-func Checknil(err error) {
+func openConnection() (*sql.DB, error) {
+	db, err := sql.Open("mysql", "root:Passwo@123@tcp(localhost:3306)/student")
 	if err != nil {
 		fmt.Println(err)
 	}
-
+	return db, nil
 }
-func Connectionsetting(driver, dataSource string) *connector {
-	db, err := sql.Open(driver, dataSource)
+
+func recieveData(db *sql.DB) (s []student) {
+	rows, _ := db.Query("SELECT * FROM student")
+	defer rows.Close()
+	for rows.Next() {
+		var student1 student
+		rows.Scan(&student1)
+		s = append(s, student1)
+	}
+	return s
+}
+
+func createFile(filename string) *os.File {
+	f, _ := os.Create(filename)
+	return f
+}
+
+func writeFile(s student, w io.Writer) error {
+	a := fmt.Sprintf("%s, %d, %d \n", s.Name, s.Age, s.Rollno)
+	_, err := w.Write([]byte(a))
 	if err != nil {
 		fmt.Println(err)
 	}
-	return &connector{*db}
+	return nil
 }
 
-func getDataSource(data config) string {
-	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", data.user, data.password, data.host, data.port, data.database)
-}
-
-//defer file.Close()
-
-func WriteFile(student []student, file *os.File) {
-	length, err := json.Marshal(student)
-	Checknil(err)
-	file.WriteString(string(length))
-}
-
-// func processData(s []student, con *connector) {
-// 	for _, c := range s {
-// 		con.WriteFile()
-// 	}
-
-// }
-
-func CreateFile(nameoffile string) (filename *os.File) {
-	filename, err := os.Create(nameoffile)
-	Checknil(err)
-	return
-}
-
-func recieveData(myDB *sql.DB) ([]student, error) {
-	row, err := myDB.Query("Select * FROM student")
-	Checknil(err)
-	var student1 []student
-	for row.Next() {
-		var s student
-		err = row.Scan(&s.Name, &s.Age, &s.Rollno)
-		Checknil(err)
-		student1 = append(student1, s)
+func recieved(s []student, f *os.File) {
+	for _, c := range s {
+		writeFile(c, f)
 	}
-	return student1, nil
 }
 
 func main() {
-	a := getDataSource(data)
-	b := Connectionsetting("mysql", a)
-	//c:=  processData(b)
-	fmt.Println(b)
+	db, _ := openConnection()
+	data := recieveData(db)
+	f := createFile("file.txt")
+	recieved(data, f)
 
 }
